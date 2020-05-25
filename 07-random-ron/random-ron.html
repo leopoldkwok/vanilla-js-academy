@@ -14,14 +14,15 @@
   <body>
     <h1>Random Ron</h1>
 
-    <blockquote id="myBlockquote"></blockquote>
+    <blockquote id="myBlockquote" aria-live="polite"></blockquote>
 
     <p>
       <button id="moreRonButton">More Ron</button>
     </p>
 
     <script>
-      let quoteFromApi = document.querySelector('#myBlockquote');
+      const quoteFromApi = document.querySelector('#myBlockquote');
+      const moreRonButton = document.querySelector('#moreRonButton');
 
       // Your code goes here...
       fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
@@ -42,8 +43,6 @@
           // There was an error
           console.warn('Something went wrong.', err);
         });
-
-      const moreRonButton = document.querySelector('#moreRonButton');
 
       // Listen for the click events on the checkbox
       moreRonButton.addEventListener(
