@@ -25,33 +25,31 @@
       const moreRonButton = document.querySelector('#moreRonButton');
 
       // Your code goes here...
-      fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
-        .then(function (response) {
-          // The API was successful!
-          if (response.ok) {
-            return response.json();
-          } else {
-            return Promise.reject(response);
-          }
-        })
-        .then(function (data) {
-          // This is the JSON from our response
-          // console.log(data[0]);
-          quoteFromApi.textContent = data[0];
-        })
-        .catch(function (err) {
-          // There was an error
-          console.warn('Something went wrong.', err);
-        });
+      let getQuote = function () {
+        fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
+          .then(function (response) {
+            // The API was successful!
+            if (response.ok) {
+              return response.json();
+            } else {
+              return Promise.reject(response);
+            }
+          })
+          .then(function (data) {
+            // This is the JSON from our response
+            // console.log(data[0]);
+            quoteFromApi.textContent = data[0];
+          })
+          .catch(function (err) {
+            // There was an error
+            console.warn('Something went wrong.', err);
+          });
+      };
+
+      getQuote();
 
       // Listen for the click events on the checkbox
-      moreRonButton.addEventListener(
-        'click',
-        (event) => {
-          location.reload();
-        },
-        false
-      );
+      moreRonButton.addEventListener('click', getQuote, false);
     </script>
   </body>
 </html>
