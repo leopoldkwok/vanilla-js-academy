@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>What to read today</title>
+
+    <style type="text/css">
+      body {
+        margin: 1em auto;
+        max-width: 40em;
+        width: 88%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>What to read today</h1>
+
+    <div id="app"></div>
+
+    <script>
+      // Your code goes here...
+
+      // Get the blockquote and button elements
+      let app = document.querySelector('#app');
+
+      // Create an array to hold used quotes
+      // let quoteCollection = [];
+
+      // Get a fresh quote and render it into the DOM
+      // var getTopStories = function () {
+      // Get a Ron Swanson quote
+      fetch(
+        'https://api.nytimes.com/svc/topstories/v2/home.json?api-key=NEKpCsRpN2bXytM0UJvIEIhbuYS9HiVA#results/7'
+      )
+        .then(function (response) {
+          if (response.ok) {
+            return response.json();
+          } else {
+            return Promise.reject(response);
+          }
+        })
+        .then(function (data) {
+          // quoteCollection.push(data[0]);
+          console.log(data);
+          console.log(data.results, 'results');
+
+          app.innerHTML =
+            '<ul>' +
+            data.results
+              .map(function (topStory) {
+                return '<li>' + topStory.title + '</li>';
+              })
+              .join('') +
+            '</ul>';
+
+          // quote.textContent = data[0];
+        })
+        .catch(function (error) {
+          quote.textContent =
+            '[Something went wrong, sorry!] I have a joke for you... The government in this town is excellent, and uses your tax dollars efficiently.';
+        });
+    </script>
+  </body>
+</html>
