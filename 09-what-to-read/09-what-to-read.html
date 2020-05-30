@@ -17,19 +17,45 @@
     <div id="app"></div>
 
     <script>
-      // Your code goes here...
+      // Store API Key for easy access
+      const apiKey = 'NEKpCsRpN2bXytM0UJvIEIhbuYS9HiVA';
 
-      // Get the blockquote and button elements
+      // Get the app
       let app = document.querySelector('#app');
 
-      // Create an array to hold used quotes
-      // let quoteCollection = [];
+      /**
+       * Render stories into the DOM
+       * @param { Array } stories. The stories to render
+       */
 
-      // Get a fresh quote and render it into the DOM
-      // var getTopStories = function () {
-      // Get a Ron Swanson quote
+      let render = function (stories) {
+        // create a new array of markup strings with array.map(), then
+        // combine them into one string with array.join(), then
+        // Insert them into the DOM with innerHTML
+        app.innerHTML = stories
+          .map(function (story) {
+            let html =
+              '<article>' +
+              '<h2><a href="' +
+              story.url +
+              '">' +
+              story.title +
+              '</a></h2>' +
+              '<p>' +
+              story.byline +
+              '</p>' +
+              '<p>' +
+              story.abstract +
+              '</p>' +
+              '</article>';
+            return html;
+          })
+          .join('');
+      };
+
+      // get the stories
       fetch(
-        'https://api.nytimes.com/svc/topstories/v2/home.json?api-key=NEKpCsRpN2bXytM0UJvIEIhbuYS9HiVA#results/7'
+        'https://api.nytimes.com/svc/topstories/v2/home.json?api-key=' + apiKey
       )
         .then(function (response) {
           if (response.ok) {
@@ -39,24 +65,11 @@
           }
         })
         .then(function (data) {
-          // quoteCollection.push(data[0]);
-          console.log(data);
-          console.log(data.results, 'results');
-
-          app.innerHTML =
-            '<ul>' +
-            data.results
-              .map(function (topStory) {
-                return '<li>' + topStory.title + '</li>';
-              })
-              .join('') +
-            '</ul>';
-
-          // quote.textContent = data[0];
+          // Render them into the DOM
+          render(data.results);
         })
         .catch(function (error) {
-          quote.textContent =
-            '[Something went wrong, sorry!] I have a joke for you... The government in this town is excellent, and uses your tax dollars efficiently.';
+          console.log('Something went wrong: ', error);
         });
     </script>
   </body>
