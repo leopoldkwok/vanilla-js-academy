@@ -13,6 +13,10 @@
 		article {
 			margin-bottom: 3em;
 		}
+
+        h2 {
+            text-transform: capitalize;
+        }
 	</style>
 </head>
 <body>
@@ -28,7 +32,7 @@
 		// Store API key to a variable for easier access
         var apiKey = 'NEKpCsRpN2bXytM0UJvIEIhbuYS9HiVA';
         
-        // get sections
+        // set the sections
         var sections = ['technology','business','sports'];
 
         // number of articles
@@ -40,13 +44,11 @@
 		 * @param  {Array} articles The articles to render
 		 */
 		var render = function (articles, section) {
-
 			// Create a new array of markup strings with array.map(), then
 			// Combine them into one string with array.join(), then
             // Insert them into the DOM with innerHTML
             
 			app.innerHTML += '<h2 class="section">' + section + '<h2>' + articles.map(function (article) {
-                console.log(app, 'test')
 				var html =
 					'<article>' +
 						'<h2><a href="' + article.url + '">' + article.title + '</a></h2>' +
@@ -57,7 +59,11 @@
 			}).join('');
 		};
 
-		// Get articles
+		/**
+         * Get articles for a section
+         * @param { String } section The section name
+         */
+
         var getArticles = function(section) {
             fetch('https://api.nytimes.com/svc/topstories/v2/' + section + '.json?api-key=' + apiKey).then(function (response) {
                     if (response.ok) {
@@ -66,13 +72,28 @@
                         return Promise.reject(response);
                     }
                 }).then(function (data) {
+
+                    // Get the first few articles
+                    var firstFew = getFirstFew(data.results);
+
                     // Render them into the DOM
-                    render(data.results.splice(0, 3), section);
+                    render(firstFew, section);
                 }).catch(function (error) {
                     console.log('Something went wrong:', error);
                 });
         }
 
+        /**
+         * Get the first few articles from the full data set
+         * @param { Array } articles The full set of articles
+         * @return { Array} The first few
+         */
+
+         var getFirstFew = function(articles) {
+             return articles.slice(0, numOfArticles);
+         }
+        
+        // Get articles for each section
         sections.forEach(function(section) {
             getArticles(section);
 
